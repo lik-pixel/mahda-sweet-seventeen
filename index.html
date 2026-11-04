@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweet Seventeen Mahda 🤍</title>
+<!-- Google Fonts & Canvas Confetti -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-pink: #e8a5c8;
+    --accent-rose: #c66b91;
+    --dark-rose: #654454;
+    --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #fce4ec 50%, #f4c2d7 100%);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--dark-rose);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+}
+
+.container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+/* AMPLOP INTERAKTIF */
+.envelope-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    text-align: center;
+}
+
+.envelope {
+    position: relative;
+    width: 280px;
+    height: 190px;
+    background: #f3c6d9;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 15px 35px rgba(198, 107, 145, 0.3);
+    cursor: pointer;
+    transition: transform 0.4s ease;
+    margin: 30px 0;
+}
+
+.envelope:hover {
+    transform: scale(1.05) rotate(-1deg);
+}
+
+.envelope::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 140px solid #f8d7e5;
+    border-right: 140px solid #f8d7e5;
+    border-top: 100px solid transparent;
+    border-bottom: 90px solid #f3c6d9;
+    border-radius: 0 0 15px 15px;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 140px solid transparent;
+    border-right: 140px solid transparent;
+    border-top: 110px solid #e8a5c8;
+    transform-origin: top;
+    transition: transform 0.5s ease 0.2s;
+    z-index: 3;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.heart-seal {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+    z-index: 4;
+    transition: opacity 0.3s ease;
+}
+
+.envelope.open .heart-seal {
+    opacity: 0;
+}
+
+/* CARD MAIN CONTENT */
+.main-card {
+    display: none;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 32px;
+    padding: 35px 25px;
+    box-shadow: 0 20px 50px rgba(190, 100, 128, 0.2);
+    animation: fadeInUp 1s ease forwards;
+}
+
+h1.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 8vw, 3.4rem);
+    color: var(--accent-rose);
+    margin: 10px 0;
+    line-height: 1.2;
+}
+
+h2.subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #ad547a;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+}
+
+.badge-17 {
+    display: inline-block;
+    background: linear-gradient(45deg, #e8a5c8, #c66b91);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(198, 107, 145, 0.3);
+    margin-bottom: 15px;
+}
+
+.stars {
+    color: var(--primary-pink);
+    letter-spacing: 6px;
+    margin: 15px 0;
+}
+
+.letter-text {
+    text-align: left;
+    font-size: 14.5px;
+    line-height: 2;
+    margin: 20px 0;
+    background: rgba(255, 240, 245, 0.5);
+    padding: 20px;
+    border-radius: 20px;
+    border-left: 4px solid var(--accent-rose);
+}
+
+.signature {
+    text-align: right;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-rose);
+    margin-top: 15px;
+}
+
+/* SCRAPBOOK GALLERY STYLING */
+.scrapbook-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.scrapbook-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px 15px;
+    margin-top: 25px;
+    padding: 10px 5px;
+}
+
+.polaroid {
+    position: relative;
+    background: #ffffff;
+    padding: 12px 12px 25px 12px;
+    border-radius: 4px;
+    box-shadow: 0 12px 25px rgba(101, 68, 84, 0.15);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Washi Tape Effect */
+.polaroid::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 30%;
+    width: 65px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px dashed rgba(198, 107, 145, 0.4);
+    transform: rotate(-4deg);
+    z-index: 2;
+}
+
+.polaroid:nth-child(even)::before {
+    transform: rotate(3deg);
+    left: 25%;
+}
+
+/* Acak Rotasi Foto */
+.polaroid:nth-child(1) { transform: rotate(-3deg); }
+.polaroid:nth-child(2) { transform: rotate(4deg); }
+.polaroid:nth-child(3) { transform: rotate(2deg); }
+.polaroid:nth-child(4) { transform: rotate(-4deg); }
+.polaroid:nth-child(5) { transform: rotate(-2deg); }
+.polaroid:nth-child(6) { transform: rotate(3deg); }
+
+.polaroid:hover {
+    transform: scale(1.08) rotate(0deg) !important;
+    z-index: 10;
+    box-shadow: 0 20px 35px rgba(198, 107, 145, 0.3);
+}
+
+.polaroid img {
+    width: 100%;
+    height: 175px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.polaroid figcaption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.35rem;
+    color: var(--dark-rose);
+    margin-top: 12px;
+    line-height: 1.1;
+}
+
+/* MAKE A WISH SECTION */
+.wish-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(252, 228, 236, 0.6));
+    border: 1px solid rgba(217, 138, 170, 0.3);
+    border-radius: 24px;
+    padding: 22px;
+    margin: 35px 0 20px;
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    border-radius: 15px;
+    border: 1.5px solid var(--primary-pink);
+    padding: 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+    resize: none;
+    margin: 12px 0;
+    background: #ffffff;
+    color: var(--dark-rose);
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-rose);
+}
+
+/* BUTTON STYLES */
+.btn-primary {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(45deg, #d98aaa, #c66b91);
+    color: white;
+    border: 0;
+    padding: 13px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(198, 107, 145, 0.35);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2deg) scale(1.03);
+    box-shadow: 0 8px 25px rgba(198, 107, 145, 0.5);
+}
+
+/* MUSIC FLOAT BUTTON */
+.music-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--primary-pink);
+    color: var(--accent-rose);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    cursor: pointer;
+}
+
+/* LIGHTBOX MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 15, 22, 0.88);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 75vh;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.modal-caption {
+    color: #fff;
+    margin-top: 15px;
+    font-family: 'Caveat', cursive;
+    font-size: 1.7rem;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #fff;
+    font-size: 35px;
+    cursor: pointer;
+}
+
+/* ANIMATIONS & FLOATING ELEMENTS */
+.floating {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    animation: floatUp 7s linear forwards;
+    z-index: 100;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatUp {
+    to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12.5px;
+    color: #a8798e;
+}
+
+@media (max-width: 480px) {
+    .polaroid img { height: 140px; }
+    .polaroid figcaption { font-size: 1.2rem; }
+    .main-card { padding: 25px 18px; }
+    .letter-text { font-size: 13.5px; padding: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Audio Latar Belakang -->
+<audio id="bgMusic" loop>
+    <source src="musik.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+
+<div class="container">
+
+    <!-- TAMPILAN AWAL: AMPLOP SURAT -->
+    <div class="envelope-wrapper" id="envelopeSection">
+        <span class="badge-17">Special Invitation 💌</span>
+        <h1 class="title">For Mahda Audriiya</h1>
+        <p style="font-size: 14px; opacity: 0.8;">Ada pesan istimewa yang menunggu untuk kamu buka...</p>
+
+        <div class="envelope" onclick="bukaSuratUtama()">
+            <div class="envelope-flap"></div>
+            <div class="heart-seal">🎀</div>
+        </div>
+
+        <button class="btn-primary" onclick="bukaSuratUtama()">Open Birthday Letter ✨</button>
+    </div>
+
+    <!-- TAMPILAN UTAMA (SURAT & SCRAPBOOK) -->
+    <main class="main-card" id="mainCard">
+        <div style="text-align: center;">
+            <div style="font-size: 45px;">🎀</div>
+            <div class="stars">✧ ✦ ✧</div>
+            <span class="badge-17">Sweet Seventeen</span>
+            <h1 class="title">Happy Birthday!</h1>
+            <h2 class="subtitle">Mahda Audriiya Al Farhanny</h2>
+            <p style="font-style: italic; font-size: 13.5px; color: #a45374;">"17 looks absolutely beautiful on you."</p>
+        </div>
+
+        <!-- SURAT BACAAN -->
+        <div class="letter-text">
+            <p>Happy Sweet Seventeen, Mahda. 🤍</p>
+            <p>Tujuh belas tahun yang lalu, seseorang yang begitu istimewa hadir ke dunia. Dan hari ini, aku sangat bersyukur bisa menjadi salah satu orang yang mengenalmu.</p>
+            <p>Semoga di usia baru ini, setiap langkahmu membawa kebahagiaan, setiap impianmu menemukan jalannya, dan setiap harimu dipenuhi hal-hal baik yang sangat pantas kamu dapatkan.</p>
+            <p>Teruslah tumbuh menjadi Mahda yang penuh mimpi, penuh keberanian, dan tetap memiliki hati yang hangat.</p>
+            <p>Kalau suatu hari nanti dunia terasa melelahkan, selalu ingat bahwa kamu tidak pernah harus menghadapi semuanya sendirian.</p>
+            <p>Terima kasih sudah hadir dan melengkapi cerita hidupku. Semoga aku masih bisa terus menjadi bagian dari cerita-cerita indahmu selanjutnya.</p>
+            <p class="signature">With love,<br>Malik 🤍</p>
+        </div>
+
+        <!-- GALERI SCRAPBOOK DIGITAL -->
+        <section class="scrapbook-section">
+            <h2 class="subtitle" style="font-size: 1.5rem;">Our Scrapbook Memory 📸</h2>
+            <p style="font-size: 13px; opacity: 0.85;">Beberapa kenangan indah yang tersimpan rapi:</p>
+
+                        <div class="scrapbook-grid">
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG-20261023-WA0138.jpg" alt="Awal-awal main">
+                    <figcaption>Awal-awal main 🌙</figcaption>
+                </figure>
+
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG-20261101-WA0042.jpg" alt="One of our moments">
+                    <figcaption>One of our moments 🎀</figcaption>
+                </figure>
+
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG-20261101-WA0048.jpg" alt="Little night memory">
+                    <figcaption>Little night memory ✨</figcaption>
+                </figure>
+
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG_20261031_202439.jpg" alt="Night moment">
+                    <figcaption>Night moment 💫</figcaption>
+                </figure>
+
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG-20261101-WA0007.jpg" alt="Favorite moment">
+                    <figcaption>Favorite moment 🌷</figcaption>
+                </figure>
+
+                <figure class="polaroid" onclick="openModal(this)">
+                    <img src="IMG-20261028-WA0033.jpg" alt="A memory to keep">
+                    <figcaption>A memory to keep 🤍</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <!-- FITUR MAKE A WISH INTERAKTIF -->
+        <section class="wish-card">
+            <h2 class="subtitle" style="font-size: 1.3rem; margin-bottom: 5px;">Make a Wish 🎂</h2>
+            <p style="font-size: 12.5px;">Tuliskan impian atau harapan terbesarmu di usia 17 tahun ini:</p>
+            <textarea id="wishInput" rows="3" placeholder="Ketik harapanmu di sini..."></textarea>
+            <button class="btn-primary" onclick="kirimWish()" style="padding: 10px 22px; font-size: 13px;">Kirim Harapan 🌟</button>
+            <p id="wishMessage" style="display:none; color: var(--accent-rose); margin-top: 12px; font-weight: 600; font-size: 13px;">Semoga semua impianmu terkabul ya, Mahda! ✨</p>
+        </section>
+
+        <div class="stars" style="text-align: center;">✧ ✦ ✧</div>
+
+        <p class="signature" style="text-align: center; font-size: 1.6rem; margin-top: 10px;">
+            Happy 17th Birthday, Mahda.<br>
+            <span style="font-size: 1.2rem; font-family: 'Poppins', sans-serif; opacity: 0.8;">From Malik.</span>
+        </p>
+    </main>
+
+    <footer class="footer">
+        Made with love by Malik 🤍
+    </footer>
+</div>
+
+<!-- LIGHTBOX POPUP FOTO -->
+<div id="imgModal" class="modal" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImg" alt="Kenangan Mahda">
+    <div class="modal-caption" id="modalCaption"></div>
+</div>
+
+<script>
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicToggle");
+let isPlaying = false;
+
+function toggleMusic() {
+    if (isPlaying) {
+        music.pause();
+        musicBtn.textContent = "🎵";
+    } else {
+        music.play();
+        musicBtn.textContent = "🔊";
+    }
+    isPlaying = !isPlaying;
+}
+
+function bukaSuratUtama() {
+    const envelope = document.querySelector(".envelope");
+    const envelopeSection = document.getElementById("envelopeSection");
+    const mainCard = document.getElementById("mainCard");
+
+    envelope.classList.add("open");
+
+    // Putar musik otomatis
+    if (!isPlaying) {
+        music.play().then(() => {
+            isPlaying = true;
+            musicBtn.textContent = "🔊";
+        }).catch(() => {});
+    }
+
+    // Efek Confetti Pembuka
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+
+    setTimeout(() => {
+        envelopeSection.style.display = "none";
+        mainCard.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 900);
+
+    for (let i = 0; i < 15; i++) {
+        buatHati();
+    }
+}
+
+function buatHati() {
+    const el = document.createElement("div");
+    const simbol = ["🤍", "💗", "🌸", "✨", "🎀"];
+
+    el.className = "floating";
+    el.textContent = simbol[Math.floor(Math.random() * simbol.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (15 + Math.random() * 24) + "px";
+    el.style.animationDuration = (4 + Math.random() * 5) + "s";
+
+    document.body.appendChild(el);
+
+    setTimeout(() => {
+        el.remove();
+    }, 9000);
+}
+
+/**
+ * @param {HTMLElement} element
+ */
+function openModal(element) {
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const captionText = document.getElementById("modalCaption");
+    
+    const imgTag = element.querySelector("img");
+    const figcaptionTag = element.querySelector("figcaption");
+
+    if (imgTag && figcaptionTag) {
+        modal.style.display = "flex";
+        modalImg.src = imgTag.src;
+        captionText.innerHTML = figcaptionTag.innerHTML;
+    }
+}
+
+function closeModal() {
+    document.getElementById("imgModal").style.display = "none";
+}
+
+function kirimWish() {
+    const input = document.getElementById("wishInput");
+    const msg = document.getElementById("wishMessage");
+
+    if (input.value.trim() !== "") {
+        msg.style.display = "block";
+        input.value = "";
+
+        confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } });
+    }
+}
+
+setInterval(buatHati, 2200);
+</script>
+</body>
+</html>
